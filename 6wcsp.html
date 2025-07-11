@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6-Week Capped Shoulders Protocol</title>
+    <style>
+        /* --- Font Import --- */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;800&family=Roboto:wght@400&display=swap');
+
+        /* --- Premium Color Palette & Design Tokens --- */
+        :root {
+            --bg-canvas: #FDFDFD;
+            --text-obsidian: #121212;
+            --text-muted: #666666;
+            --accent-gold-start: #FFD700;
+            --accent-gold-end: #FFC700;
+            --accent-blue: #007AFF;
+            --border-color: #EAEAEA;
+            --card-bg: #FFFFFF;
+            --shadow-light: rgba(0, 0, 0, 0.04);
+            --shadow-medium: rgba(0, 0, 0, 0.08);
+            --heading-font: 'Inter', sans-serif;
+            --body-font: 'Roboto', sans-serif;
+        }
+
+        /* --- Global Resets & Base Styles --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--body-font);
+            background-color: var(--bg-canvas);
+            color: var(--text-obsidian);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* --- Main Layout Container --- */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+        }
+
+        /* --- Page Navigation System --- */
+        .page {
+            display: none;
+            animation: fadeInSmooth 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .page.active {
+            display: block;
+        }
+        @keyframes fadeInSmooth {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Premium Typography --- */
+        h1, h2, h3 {
+            font-family: var(--heading-font);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            letter-spacing: 0.5px;
+        }
+        h1 { font-size: 3rem; text-align: center; margin-bottom: 0.5rem; }
+        h2 { font-size: 2.2rem; margin-top: 3rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; }
+        h3 { font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem; }
+        h4 { font-family: var(--heading-font); font-weight: 600; font-size: 1.2rem; margin-bottom: 1rem; }
+        p { margin-bottom: 1.5rem; color: var(--text-muted); max-width: 65ch; }
+        .subtle { font-style: italic; color: #999; font-size: 0.9rem; display: block; margin-top: 0.25rem; }
+        ul { list-style-position: outside; padding-left: 1.2rem; }
+        ul li { margin-bottom: 0.75rem; color: var(--text-muted); }
+        ul li::marker { color: var(--accent-gold-start); }
+
+        /* --- Header --- */
+        .header { text-align: center; margin-bottom: 4rem; }
+        .header p { margin: 0 auto; }
+        
+        /* --- Premium Dashboard --- */
+        .dashboard-section { margin-bottom: 2.5rem; }
+        .dashboard-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        .dashboard-grid.splits-grid {
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        }
+        .dashboard-grid.resources-grid {
+             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+             max-width: 600px;
+             margin: 0 auto;
+        }
+        .dashboard-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 2rem 1.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 4px 10px var(--shadow-light);
+            min-height: 120px;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-gold-start);
+            box-shadow: 0 8px 20px var(--shadow-medium);
+        }
+        .dashboard-card .card-title { font-family: var(--heading-font); font-weight: 600; font-size: 1.2rem; color: var(--text-obsidian); margin: 0; }
+        .dashboard-card .card-description { font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.4; }
+        .dashboard-card.video-card {
+            grid-column: 1 / -1; /* Span full width */
+            background-image: linear-gradient(45deg, var(--accent-gold-start), var(--accent-gold-end));
+        }
+        .dashboard-card.video-card .card-title {
+            color: #000;
+        }
+
+        /* --- Navigation Buttons --- */
+        .nav-button-container { text-align: center; margin: 3rem 0 1rem; }
+        .back-to-dashboard {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background-image: linear-gradient(45deg, var(--accent-gold-start), var(--accent-gold-end));
+            color: #000;
+            font-family: var(--heading-font);
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px var(--shadow-light);
+            border: none;
+        }
+        .back-to-dashboard:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(255,195,0,0.4);
+        }
+        .top-nav { margin-bottom: 2rem; text-align: left;}
+
+        /* --- Table Styling --- */
+        .table-wrapper { overflow-x: auto; }
+        .workout-table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+        .workout-table th, .workout-table td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border-color); }
+        .workout-table th { font-family: var(--heading-font); font-weight: 600; color: var(--text-muted); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; }
+        .workout-table td { font-size: 1rem; vertical-align: middle; }
+        .workout-table tr:last-child td { border-bottom: none; }
+
+        /* --- Interactive Tracker --- */
+        .tracker-input-group { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+        .tracker-input {
+            width: 100%;
+            max-width: 70px;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--card-bg);
+            font-family: var(--body-font);
+            font-size: 1rem;
+            color: var(--text-obsidian);
+            transition: all 0.3s;
+            text-align: center;
+        }
+        .tracker-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            background-color: var(--card-bg);
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        }
+        .tracker-input::placeholder { color: #ccc; }
+        .tracker-input-label { font-size: 0.8rem; color: var(--text-muted); }
+        
+        /* --- Accordion / Dropdown Styling --- */
+        .accordion-item {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .accordion-item:hover {
+            border-color: #ccc;
+            box-shadow: 0 4px 10px var(--shadow-light);
+        }
+        .accordion-trigger {
+            cursor: pointer;
+            width: 100%;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .accordion-trigger h4, .accordion-trigger h5 { margin: 0; color: var(--text-obsidian); }
+        .accordion-trigger .icon {
+            font-style: normal;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .accordion-item.active .accordion-trigger .icon {
+            transform: rotate(45deg);
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .accordion-content-inner {
+            padding: 0 1.5rem 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+        .accordion-content-inner p:last-child { margin-bottom: 0; }
+        .exercise-special-note { text-align: center; font-style: italic; color: var(--text-muted); margin-bottom: 1rem; }
+
+        /* --- Exercise Vault & Inline Reveal Specifics --- */
+        .vault-section .accordion-item { background-color: rgba(0,0,0,0.02); }
+        .exercise-content-inner { padding-top: 1.5rem; }
+        .exercise-content-inner h5 { font-family: var(--heading-font); font-weight: 600; color: var(--accent-blue); margin-bottom: 0.5rem; }
+        .exercise-content-inner ul { margin-bottom: 1.5rem; }
+        .img-placeholder-container { display: grid; gap: 1rem; margin-top: 1.5rem; }
+        .img-placeholder-container.two-col { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+        .img-placeholder-container.five-col { grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); }
+        .img-placeholder { 
+            background-color: #f0f0f0; 
+            border-radius: 12px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: #999; 
+            overflow: hidden;
+        }
+        .img-placeholder img { 
+            width: 100%; 
+            height: auto; 
+            display: block;
+            border-radius: 10px;
+        }
+        
+        .exercise-reveal-trigger {
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-obsidian);
+            transition: color 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .exercise-reveal-trigger .reveal-text {
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: var(--text-muted);
+            transition: color 0.3s;
+        }
+        .exercise-reveal-trigger:hover, .exercise-reveal-trigger:hover .reveal-text {
+            color: var(--accent-blue);
+        }
+        .exercise-reveal-row {
+            display: none;
+        }
+        .exercise-reveal-content {
+            background-color: #fafafa;
+            padding: 1.5rem;
+        }
+        .exercise-reveal-content .reveal-description {
+            font-style: italic;
+            color: var(--text-obsidian);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            border-left: 3px solid var(--accent-gold-start);
+            padding-left: 1rem;
+        }
+        
+        /* --- Video Modal --- */
+        .video-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .video-modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+        .video-modal-content {
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .video-modal-close {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            width: 30px;
+            height: 30px;
+            background: var(--card-bg);
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.3s;
+        }
+        .video-modal-close:hover {
+            transform: scale(1.1);
+            color: var(--text-obsidian);
+        }
+        
+        /* --- Sticky Logo --- */
+        .sticky-logo-container {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            cursor: pointer;
+        }
+        .sticky-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--card-bg);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .sticky-logo:hover {
+            transform: scale(1.1);
+        }
+
+        /* --- Footer/License --- */
+        .footer-license {
+            text-align: center;
+            padding: 4rem 1rem 1rem;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+        .footer-license p {
+            margin-bottom: 0.5rem;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="sticky-logo-container" data-target="page-dashboard">
+        <img src="https://i.imgur.com/usrrpRE.png" alt="Brand Logo" class="sticky-logo">
+    </div>
+
+    <div class="container">
+        <!-- PAGE: Dashboard -->
+        <div id="page-dashboard" class="page active">
+            <header class="header">
+                <h1>6-Week Capped Shoulders Protocol</h1>
+                <p>The complete system to build wide, three-dimensional shoulders. <br>Select your split to begin.</p>
+            </header>
+            <main>
+                <div class="dashboard-section">
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card video-card" id="open-video-modal">
+                            <div class="card-title">▶ Watch The 4-Minute Intro</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-section">
+                    <div class="dashboard-grid splits-grid">
+                        <div class="dashboard-card" data-target="page-ppl">
+                            <div class="card-title">Push/Pull/Legs</div>
+                        </div>
+                        <div class="dashboard-card" data-target="page-bro">
+                            <div class="card-title">Bro Split</div>
+                        </div>
+                        <div class="dashboard-card" data-target="page-full-body">
+                            <div class="card-title">Full Body</div>
+                        </div>
+                        <div class="dashboard-card" data-target="page-upper-lower">
+                            <div class="card-title">Upper/Lower</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-section">
+                     <div class="dashboard-grid resources-grid">
+                        <div class="dashboard-card" data-target="page-solutions">
+                            <div>
+                                <div class="card-title">Solution Modules</div>
+                                <div class="card-description">Key solutions to accelerate your growth.</div>
+                            </div>
+                        </div>
+                        <div class="dashboard-card" data-target="page-vault">
+                            <div>
+                                <div class="card-title">Exercise Vault</div>
+                                <div class="card-description">A library of approved movements & techniques.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- PAGE: PPL Split -->
+        <div id="page-ppl" class="page">
+            <div class="nav-button-container top-nav"><button class="back-to-dashboard">← Dashboard</button></div>
+            <h2>Protocol: Push/Pull/Legs</h2>
+            <h3 style="margin-top: 1rem;">Integration Schedule</h3>
+            <div class="table-wrapper">
+                <table class="workout-table">
+                    <thead><tr><th>Day</th><th>Training Focus</th></tr></thead>
+                    <tbody>
+                        <tr><td>Mon</td><td>Push + <strong>Shoulder Workout A</strong></td></tr>
+                        <tr><td>Tue</td><td>Pull</td></tr>
+                        <tr><td>Wed</td><td>Legs</td></tr>
+                        <tr><td>Thu</td><td>Push + <strong>Shoulder Workout B</strong></td></tr>
+                        <tr><td>Fri</td><td>Pull</td></tr>
+                        <tr><td>Sat</td><td>Legs</td></tr>
+                        <tr><td>Sun</td><td>Rest</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <h3 style="margin-top: 3rem;">Core Workouts & Progress Tracker</h3>
+            <p>Click any exercise name to reveal a visual guide. Use the weekly dropdowns to log your progress directly.</p>
+            <div id="ppl-tracker"></div>
+            <div class="nav-button-container"><button class="back-to-dashboard">← Dashboard</button></div>
+        </div>
+        
+        <!-- PAGE: Bro Split -->
+        <div id="page-bro" class="page">
+             <div class="nav-button-container top-nav"><button class="back-to-dashboard">← Dashboard</button></div>
+            <h2>Protocol: Bro Split</h2>
+            <h3 style="margin-top: 1rem;">Integration Schedule</h3>
+            <div class="table-wrapper">
+                <table class="workout-table">
+                    <thead><tr><th>Day</th><th>Training Focus</th></tr></thead>
+                    <tbody>
+                        <tr><td>Mon</td><td>Chest + <strong>Shoulder Workout A</strong></td></tr>
+                        <tr><td>Tue</td><td>Back</td></tr>
+                        <tr><td>Wed</td><td>Shoulders (Perform <strong>Shoulder Workout B</strong>)</td></tr>
+                        <tr><td>Thu</td><td>Arms</td></tr>
+                        <tr><td>Fri</td><td>Legs</td></tr>
+                        <tr><td>Sat</td><td>Rest</td></tr>
+                        <tr><td>Sun</td><td>Rest</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <h3 style="margin-top: 3rem;">Core Workouts & Progress Tracker</h3>
+            <p>Click any exercise name to reveal a visual guide. Use the weekly dropdowns to log your progress directly.</p>
+            <div id="bro-tracker"></div>
+            <div class="nav-button-container"><button class="back-to-dashboard">← Dashboard</button></div>
+        </div>
+
+        <!-- PAGE: Full Body Split -->
+        <div id="page-full-body" class="page">
+             <div class="nav-button-container top-nav"><button class="back-to-dashboard">← Dashboard</button></div>
+            <h2>Protocol: Full Body</h2>
+            <h3 style="margin-top: 1rem;">Integration Schedule</h3>
+            <div class="table-wrapper">
+                <table class="workout-table">
+                    <thead><tr><th>Day</th><th>Training Focus</th></tr></thead>
+                    <tbody>
+                        <tr><td>Mon</td><td>Full Body</td></tr>
+                        <tr><td>Tue</td><td><strong>Shoulder Workout A</strong></td></tr>
+                        <tr><td>Wed</td><td>Full Body</td></tr>
+                        <tr><td>Thu</td><td><strong>Shoulder Workout B</strong></td></tr>
+                        <tr><td>Fri</td><td>Full Body</td></tr>
+                        <tr><td>Sat</td><td>Rest</td></tr>
+                        <tr><td>Sun</td><td>Rest</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <h3 style="margin-top: 3rem;">Core Workouts & Progress Tracker</h3>
+            <p>Click any exercise name to reveal a visual guide. Use the weekly dropdowns to log your progress directly.</p>
+            <div id="full-body-tracker"></div>
+            <div class="nav-button-container"><button class="back-to-dashboard">← Dashboard</button></div>
+        </div>
+
+        <!-- PAGE: Upper/Lower Split -->
+        <div id="page-upper-lower" class="page">
+             <div class="nav-button-container top-nav"><button class="back-to-dashboard">← Dashboard</button></div>
+            <h2>Protocol: Upper/Lower</h2>
+            <h3 style="margin-top: 1rem;">Integration Schedule</h3>
+            <div class="table-wrapper">
+                <table class="workout-table">
+                    <thead><tr><th>Day</th><th>Training Focus</th></tr></thead>
+                    <tbody>
+                        <tr><td>Mon</td><td>Upper Body + <strong>Shoulder Workout A</strong></td></tr>
+                        <tr><td>Tue</td><td>Lower Body</td></tr>
+                        <tr><td>Wed</td><td>Rest (Perform <strong>Shoulder Workout B</strong>)</td></tr>
+                        <tr><td>Thu</td><td>Upper Body</td></tr>
+                        <tr><td>Fri</td><td>Lower Body</td></tr>
+                        <tr><td>Sat</td><td>Rest</td></tr>
+                        <tr><td>Sun</td><td>Rest</td></tr>
+                    </tbody>
+                </table>
+            </div>
+             <h3 style="margin-top: 3rem;">Core Workouts & Progress Tracker</h3>
+            <p>Click any exercise name to reveal a visual guide. Use the weekly dropdowns to log your progress directly.</p>
+            <div id="upper-lower-tracker"></div>
+            <div class="nav-button-container"><button class="back-to-dashboard">← Dashboard</button></div>
+        </div>
+
+        <!-- PAGE: Solution Modules -->
+        <div id="page-solutions" class="page">
+            <div class="nav-button-container top-nav"><button class="back-to-dashboard">← Dashboard</button></div>
+            <h2>Solution Modules</h2>
+            <p>These modules fix the key reasons most fail to grow shoulders. Apply them to improve fueling, recovery, and technique.</p>
+            <div class="accordion-item"><div class="accordion-trigger"><h4>Fuel Your Gains in 15 Seconds</h4><i class="icon">+</i></div><div class="accordion-content"><div class="accordion-content-inner">
+                    <h5>The Principle</h5><p>Reps only build muscle if your body is fueled. No hydration, no growth.</p>
+                    <h5>The System</h5><ul><li>Add a pinch of salt to your water (500ml–1L).</li><li>Start sipping halfway through your warm-up, then hit it between sets.</li></ul>
+                    <h5>The Reasoning</h5><p>Salt helps your body absorb and hold water. This intra-workout hydration is the fuel for your pump, keeping your muscles full and your reps strong.</p>
+                    <h5>Pro Tip</h5><p>Want longer pumps and fewer cramps? Swap your salt for Lite Salt. It's a $3 fix for a big upgrade.</p>
+                    <div class="img-placeholder-container"><div class="img-placeholder"></div></div>
+                </div></div>
+            </div>
+            <div class="accordion-item"><div class="accordion-trigger"><h4>Cap Shoulders in 30 Minutes</h4><i class="icon">+</i></div><div class="accordion-content"><div class="accordion-content-inner">
+                    <h5>The Principle</h5><p>Most of your results come from a few key lifts done well. You don’t need more time—you need more stimulus per rep.</p>
+                    <h5>The System (Time-Crunched Alternative)</h5><ul><li>(SIDE) Lateral Raise (Cable or DB) – 2 sets</li><li>(SIDE) Raise Partials (Heavy Lateral Swings) – 1 set</li><li>(FRONT) Overhead Press – 2 sets</li><li>(REAR) Rear Delt Fly (Machine or DB) – 2 sets</li><li>Rest only 30-45 seconds between sets.</li></ul>
+                    <h5>The Reasoning</h5><p>This routine prioritizes the highest-impact movements for each part of the shoulder. By minimizing rest and focusing on intensity, you create maximum stimulus in minimum time.</p>
+                    <h5>Pro Tip</h5><p>Effort beats volume. A few hard, focused sets will always build more muscle than ten lazy ones.</p>
+                    <div class="img-placeholder-container"><div class="img-placeholder"></div></div>
+                </div></div>
+            </div>
+            <div class="accordion-item"><div class="accordion-trigger"><h4>Hit All 3 Heads of the Shoulder</h4><i class="icon">+</i></div><div class="accordion-content"><div class="accordion-content-inner">
+                    <h5>The Principle</h5><p>Shoulders have three parts, and each needs different training. Side delts give you width, so they should be your main focus.</p>
+                    <h5>The System</h5><ul><li><b>Front Delts</b> → Overhead Press</li><li><b>Side Delts</b> → Lateral Raises (standard or partials)</li><li><b>Rear Delts</b> → Reverse Flys or Face Pulls</li></ul>
+                    <h5>The Reasoning</h5><p>Pressing trains the front. Raises train the sides. Pulls and flys train the rear. By using one direct, high-quality movement for each head, you ensure complete development without wasted effort.</p>
+                    <h5>Pro Tip</h5><p>If you already train chest hard with lots of pressing, your front delts get plenty of work. Prioritize your side and rear delt movements to build the "capped" 3D look.</p>
+                    <div class="img-placeholder-container"><div class="img-placeholder"></div></div>
+                </div></div>
+            </div>
+            <div class="accordion-item"><div class="accordion-trigger"><h4>Grow Muscle While You Sleep</h4><i class="icon">+</i></div><div class="accordion-content"><div class="accordion-content-inner">
+                    <h5>The Principle</h5><p>You break down muscle in the gym, but you build it in your sleep. Most guys waste this critical growth window.</p>
+                    <h5>The System</h5><ul><li>Sleep 8+ hours a night.</li><li>Stick to the same bedtime and wake time every day.</li><li>Make your room completely dark and cool.</li><li>No caffeine after 2 PM.</li></ul>
+                    <h5>The Reasoning</h5><p>Growth happens at night when recovery hormones peak and your body rebuilds damaged muscle tissue. Consistency and a dark, cool environment maximize sleep quality and hormonal output.</p>
+                    <h5>Pro Tip</h5><p>Sleep is the only legal cheat code you’re not using. Master it, and you'll grow faster than everyone who doesn't.</p>
+                    <div class="img-placeholder-container"><div class="img-placeholder"></div></div>
+                </div></div>
+            </div>
+            <div class="accordion-item"><div class="accordion-trigger"><h4>Get Your Protein for Less</h4><i class="icon">+</i></div><div class="accordion-content"><div class="accordion-content-inner">
+                    <h5>The Principle</h5><p>Hitting your protein target isn’t expensive—it’s a matter of buying the right foods. The goal is 200g of protein per day. Non-negotiable.</p>
+                    <h5>The System</h5><p>Build your shopping list around these cheap, high-protein staples:</p><ul><li>Tuna (in springwater)</li><li>Protein Greek yogurt</li><li>Chicken breast</li><li>Frozen fish fillets (basa, hoki)</li><li>Whey protein concentrate (1kg bags)</li><li>Frozen egg whites (bulk bags)</li></ul>
+                    <h5>The Reasoning</h5><p>These foods offer the highest protein-per-dollar ratio. Focusing your budget here allows you to easily hit your daily target without overspending on expensive cuts or branded products.</p>
+                    <h5>Pro Tip</h5><p>Aldi, Coles, and Woolies home brands have the cheapest tuna, yogurt, and frozen fish. For whey, buy from Bulk Nutrients online for the best price per kilogram.</p>
+                    <div class="img-placeholder-container"><div class="img-placeholder"></div></div>
+                </div></div>
+            </div>
+            <div class="nav-button-container"><button class="back-to-dashboard">← Dashboard</button></div>
+        </div>
+        <div id="page-vault" class="page vault-section">
+            <div class="nav-button-container top-nav"><button class="back-to-dashboard">← Dashboard</button></div>
+            <h2>Exercise Vault</h2>
+            <p>Your library of approved movements. Each exercise is selected for maximum efficacy. Refer to this section for technique and execution cues.</p>
+            
+            <div class="accordion-item">
+                <div class="accordion-trigger"><h4>Front Delts</h4><i class="icon">+</i></div>
+                <div class="accordion-content">
+                    <div class="accordion-content-inner">
+                        <div class="accordion-item"><div class="accordion-trigger"><h5>Cable Front Raise</h5><i class="icon">+</i></div><div class="accordion-content"><div class="accordion-content-inner exercise-content-inner"><p>🎯 <b>Target:</b> Front Delts</p><h5>⚙️ Setup</h5><ul><li>Set cables low (bottom position)</li><li>Stand centered between pulleys</li><li>Soft bend in elbows</li></ul><h5>🔥 Key Cues</h5><ul><li>Raise both handles straight up in front — stop just above shoulder level.</li><li>Control both concentric and eccentric — no swinging.</li><li>Keep core tight — avoid leaning back.</li></ul><h5>⚠️ Mistakes to Avoid</h5><ul><li>Overarching lower back.</li><li>Using momentum to swing the cables.</li></ul><p>💡 <b>Quick Tip:</b> Think "drag hands up with your shoulders" — don't pull with arms.</p><div class="img-placeholder-container two-col"><div class="img-placeholder"><img src="https://i.imgur.com/fKAwI17.png" alt="Cable Front Raise Start"></div><div class="img-placeholder"><img src="https://i.imgur.com/T0eWQCM.png" alt="Cable Front Raise End"></div></div></div></div></div>
+                        <div class="accordion-item"><div class="accordion-trigger"><h5>Seated Dumbbell Shoulder Press</h5><i class="icon">+</i></div><div class="accordion-content"><div class="accordion-content-inner exercise-content-inner"><h5>⚙️ Setup</h5><ul><li>Sit upright on a bench with back support.</li><li>Feet planted, core braced.</li><li>Dumbbells at shoulder height, palms facing forward.</li></ul><h5>🔥 Key Cues</h5><ul><li>Press dumbbells straight up — not forward or backward.</li><li>Lower slowly back to shoulder level.</li></ul><h5>⚠️ Mistakes to Avoid</h5><ul><li>Flaring elbows too wide.</li><li>Arching lower back excessively.</li><li>Bouncing dumbbells off shoulders at bottom.</li></ul><p>💡 <b>Quick Tip:</b> Keep your forearms vertical throughout — wrists stacked over elbows to stay locked in.</p><div class="img-placeholder-container two-col"><div class="img-placeholder"><img src="https://i.imgur.com/vZFMqwM.png" alt="Seated Dumbbell Shoulder Press Start"></div><div class="img-placeholder"><img src="https://i.imgur.com/ZqWeO0S.png" alt="Seated Dumbbell Shoulder Press End"></div></div></div></div></div>
+                        <div class="accordion-item"><div class="accordion-trigger"><h5>🏆 Smith Machine Seated Shoulder Press</h5><i class="icon">+</i></div><div class="accordion-content"><div class="accordion-content-inner exercise-content-inner"><p>🎯 <b>Target:</b> Front Delts (primary), Side Delts (secondary), Triceps</p><h5>⚙️ Setup</h5><ul><li>Bench upright under Smith bar.</li><li>Bar starts just above shoulder height.</li><li>Hands slightly wider than shoulders.</li><li>Bar just in front of face.</li></ul><h5>🔥 Key Cues</h5><ul><li>Press bar straight up.</li><li>Lower bar under control to just above upper chest.</li><li>Keep elbows slightly in front of body.</li></ul><h5>⚠️ Mistakes to Avoid</h5><ul><li>Letting elbows flare fully out.</li><li>Arching lower back aggressively.</li></ul><p>💡 <b>Quick Tip:</b> Let the bar come down as far as you can for max range.</p><div class="img-placeholder-container two-col"><div class="img-placeholder"><img src="https://i.imgur.com/VLdZQzA.png" alt="Smith Machine Press Start"></div><div class="img-placeholder"><img src="https://i.imgur.com/4sOOhoW.png" alt="Smith Machine Press End"></div></div></div></div></div>
+                        <div class="accordion-item"><div class="accordion-trigger"><h5>Resistance Band Shoulder Press w/ Pull-Apart</h5><i class="icon">+</i></div><div class="accordion-content"><div class="accordion-content-inner exercise-content-inner"><p>🎯 <b>Target:</b> Front Delts (press), Side/Rear Delts (pull-apart), Upper Back</p><h5>⚙️ Setup</h5><ul><li>Stand on resistance band with feet shoulder-width.</li><li>Grip handles at shoulder height, palms forward.</li></ul><h5>🔥 Key Cues</h5><ul><li>Press straight up to overhead position.</li><li>At the top, pull hands apart, pause briefly.</li><li>Return hands to center, then lower.</li></ul><h5>⚠️ Mistakes to Avoid</h5><ul><li>Rushing the pull-apart.</li><li>Leaning back excessively.</li></ul><p>💡 <b>Quick Tip:</b> Think “press tall, pull wide” for extra stimulus.</p><div class="img-placeholder-container five-col"><div class="img-placeholder"><img src="https://i.imgur.com/Q7u9ixA.png" alt="Band Press Step 1"></div><div class="img-placeholder"><img src="https://i.imgur.com/th2Y9AY.png" alt="Band Press Step 2"></div><div class="img-placeholder"><img src="https://i.imgur.com/SCDQL4m.png" alt="Band Press Step 3"></div><div class="img-placeholder"><img src="https://i.imgur.com/rV5LPRv.png" alt="Band Press Step 4"></div><div class="img-placeholder"><img src="https://i.imgur.com/d9EDOVt.png" alt="Band Press Step 5"></div></div></div></div></div>
+                        <div class="accordion-item"><div class="accordion-trigger"><h5>EZ Bar Front Raise</h5><i class="icon">+</i></div><div class="accordion-content"><div class="accordion-content-inner exercise-content-inner"><p>🎯 <b>Target:</b> Front Delts</p><h5>⚙️ Setup</h5><ul><li>Hold EZ bar with narrow grip, palms facing down.</li><li>Arms extended fully down.</li></ul><h5>🔥 Key Cues</h5><ul><li>Raise bar to shoulder height.</li><li>Keep slight bend in elbows.</li><li>Control the movement — no swinging.</li></ul><h5>⚠️ Mistakes to Avoid</h5><ul><li>Overarching lower back.</li><li>Jerking the bar up with momentum.</li></ul><p>💡 <b>Quick Tip:</b> Think “smooth controlled lift with front delts doing all the work”.</p><div class="img-placeholder-container two-col"><div class="img-placeholder"><img src="https://i.imgur.com/uBknuAg.png" alt="EZ Bar Front Raise Start"></div><div class="img-placeholder"><img src="https://i.imgur.com/au3RcSa.png" alt="EZ Bar Front Raise End"></div></div></div></div></div>
+                        <div class="accordion-item"><div class="accordion-trigger"><h5>Machine Shoulder Press</h5><i class="icon">+</i></div><div class="accordion-content"><div class="accordion-content-inner exercise-content-inner"><p>🎯 <b>Target:</b> Front Delts (primary), Side Delts (secondary), Triceps</p><h5>⚙️ Setup</h5><ul><li>Adjust seat so handles start around chin level.</li><li>Back fully against pad.</li></ul><h5>🔥 Key Cues</h5><ul><li>Press straight up under control.</li><li>Stop just short of full lockout.</li></ul><h5>⚠️ Mistakes to Avoid</h5><ul><li>Overarching lower back.</li><li>Bouncing off the bottom position.</li></ul><p>💡 <b>Quick Tip:</b> Let the machine keep you locked in — your only job is pure shoulder tension.</p><div class="img-placeholder-container two-col"><div class="img-placeholder"><img src="https://i.imgur.com/vjc1ZP4.png" alt="Machine Press Start"></div><div class="img-placeholder"><img src="https://i.imgur.com/7g5Q6WR.png" alt="Machine Press End"></div></div></div></div></div>
+                        <div class="accordion-item"><div class="accordion-trigger"><h5>Barbell Standing Military Press</h5><i class="icon">+</i></div><div class="accordion-content"><div class="accordion-content-inner exercise-content-inner"><p>🎯 <b>Target:</b> Front Delts (primary), Side Delts (secondary), Triceps, Upper Back</p><h5>⚙️ Setup</h5><ul><li>Grip bar slightly wider than shoulder-width.</li><li>Bar starts at upper chest/collarbone level.</li></ul><h5>🔥 Key Cues</h5><ul><li>Press bar straight up.</li><li>Move head slightly back as bar passes face.</li><li>Stay tight through abs and glutes.</li></ul><h5>⚠️ Mistakes to Avoid</h5><ul><li>Leaning back excessively.</li><li>Letting bar drift forward.</li></ul><p>💡 <b>Quick Tip:</b> Think “bar moves in a straight line — head moves around the bar.”</p><div class="img-placeholder-container two-col"><div class="img-placeholder"><img src="https://i.imgur.com/GpPWMZa.png" alt="Military Press Start"></div><div class="img-placeholder"><img src="https://i.imgur.com/uq8fAfc.png" alt="Military Press End"></div></div></div></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-trigger"><h4>Side Delts</h4><i class="icon">+</i></div>
+                <div class="accordion-content">
+                     <div class="accordion-content-inner">
+                        <div class="accordion-item"><div class="accordion-trigger"><h5>Cable Lateral Raise</h5><i class="icon">+</i></div><div class="accordion-content"><div class="accordion-content-inner exercise-content-inner"><p>🎯 <b>Target:</b> Side Delts</p><h5>⚙️ Setup</h5><ul><li>Cable height just below hip.</li></ul><h5>🔥 Key Cues</h5><ul><li>Lead with your elbow.</li><li>Control the movement up and down.</li><li>Stop just above shoulder height.</li></ul><h5>⚠️ Mistakes to Avoid</h5><ul><li>Shrugging traps.</li><li>Using momentum.</li></ul><p>💡 <b>Quick Tip:</b> Behind the back variation for better stretch.</p><div class="img-placeholder-container two-col"><div class="img-placeholder"><img src="https://i.imgur.com/AzrVb3B.png" alt="Cable Lateral Raise Start"></div><div class="img-placeholder"><img src="https://i.imgur.com/PWnEguw.png" alt="Cable Lateral Raise End"></div></div></div></div></div>
+                        <div class="accordion-item"><div class="accordion-trigger"><h5>Dumbbell Lateral Raises</h5><i class="icon">+</i></div><div class="accordion-content"><div class="accordion-content-inner exercise-content-inner"><p>🎯 <b>Target:</b> Side Delts</p><h5>⚙️ Setup</h5><ul><li>Stand tall, dumbbells at sides.</li></ul><h5>🔥 Key Cues</h5><ul><li>Lead with elbows, not hands.</li><li>Raise to just above shoulder height.</li></ul><h5>⚠️ Mistakes to Avoid</h5><ul><li>Using momentum or bouncing.</li><li>Bending elbows mid-rep.</li></ul><p>💡 <b>Quick Tip:</b> Think "push the dumbbells out sideways, not up."</p><div class="img-placeholder-container two-col"><div class="img-placeholder"></div><div class="img-placeholder"></div></div></div></div></div>
+                        <div class="accordion-item"><div class="accordion-trigger"><h5>Seated Dumbbell Lateral Raise</h5><i class="icon">+</i></div><div class="accordion-content"><div class="accordion-content-inner exercise-content-inner"><p>🎯 <b>Target:</b> Side Delts (primary)</p><h5>⚙️ Setup</h5><ul><li>Sit upright on flat bench.</li><li>Dumbbells at sides with slight bend in elbows.</li></ul><h5>🔥 Key Cues</h5><ul><li>Lead with elbows.</li><li>Raise out to sides.</li></ul><h5>⚠️ Mistakes to Avoid</h5><ul><li>Letting traps take over.</li><li>Turning into a front raise.</li></ul><p>💡 <b>Quick Tip:</b> Think "lift out to the sides, not up".</p><div class="img-placeholder-container two-col"><div class="img-placeholder"><img src="https://i.imgur.com/djP7RC8.png" alt="Seated DB Lateral Start"></div><div class="img-placeholder"><img src="https://i.imgur.com/EXZJW3p.png" alt="Seated DB Lateral End"></div></div></div></div></div>
+                        <div class="accordion-item"><div class="accordion-trigger"><h5>Full ROM Dumbbell Lateral Raise</h5><i class="icon">+</i></div><div class="accordion-content"><div class="accordion-content-inner exercise-content-inner"><p>🎯 <b>Target:</b> Side Delts (primary), Upper Traps (secondary)</p><h5>⚙️ Setup</h5><ul><li>Use lighter weight than standard.</li></ul><h5>🔥 Key Cues</h5><ul><li>Raise arms out and up all the way overhead.</li><li>Control both concentric and eccentric.</li></ul><h5>⚠️ Mistakes to Avoid</h5><ul><li>Using heavy weight that forces momentum.</li></ul><p>💡 <b>Quick Tip:</b> Think “lift out and up in an arc”.</p><div class="img-placeholder-container two-col"><div class="img-placeholder"><img src="https://i.imgur.com/07VRtEN.png" alt="Full ROM Lateral Start"></div><div class="img-placeholder"><img src="https://i.imgur.com/P2NCFsq.png" alt="Full ROM Lateral End"></div></div></div></div></div>
+                        <div class="accordion-item"><div class="accordion-trigger"><h5>🏆 Dumbbell Lateral Raise Partials</h5><i class="icon">+</i></div><div class="accordion-content"><div class="accordion-content-inner exercise-content-inner"><p>🎯 <b>Target:</b> Side Delts (maximum overload)</p><h5>⚙️ Setup</h5><ul><li>Use heavy weight.</li></ul><h5>🔥 Key Cues</h5><ul><li>Short, controlled swings in bottom half of range.</li><li>Lead with elbows.</li><li>Keep constant tension.</li></ul><h5>⚠️ Mistakes to Avoid</h5><ul><li>Turning it into a full body swing.</li></ul><p>💡 <b>Quick Tip:</b> Think “controlled power swings” — heavy load, small range.</p><div class="img-placeholder-container two-col"><div class="img-placeholder"><img src="https://i.imgur.com/iXR26KG.png" alt="DB Lateral Partials Start"></div><div class="img-placeholder"><img src="https://i.imgur.com/Cb0SYDW.png" alt="DB Lateral Partials End"></div></div></div></div></div>
+                        <div class="accordion-item"><div class="accordion-trigger"><h5>Lean-In Dumbbell Lateral Raise</h5><i class="icon">+</i></div><div class="accordion-content"><div class="accordion-content-inner exercise-content-inner"><p>🎯 <b>Target:</b> Side Delts (pure isolation)</p><h5>⚙️ Setup</h5><ul><li>Stand sideways to a wall and lean into it.</li></ul><h5>🔥 Key Cues</h5><ul><li>Lead with elbow.</li><li>Stay fully locked into the support.</li></ul><h5>⚠️ Mistakes to Avoid</h5><ul><li>Letting traps take over.</li><li>Using momentum.</li></ul><p>💡 <b>Quick Tip:</b> Think “glide elbow out along a perfect sideways path.”</p><div class="img-placeholder-container two-col"><div class="img-placeholder"><img src="https://i.imgur.com/Bmgrfdt.png" alt="Lean-In Lateral Start"></div><div class="img-placeholder"><img src="https://i.imgur.com/ShF8gM0.png" alt="Lean-In Lateral End"></div></div></div></div></div>
+                        <div class="accordion-item"><div class="accordion-trigger"><h5>Cable Rope Upright Row</h5><i class="icon">+</i></div><div class="accordion-content"><div class="accordion-content-inner exercise-content-inner"><p>🎯 <b>Target:</b> Side Delts (primary), Upper Traps</p><h5>⚙️ Setup</h5><ul><li>Attach rope to low cable pulley.</li></ul><h5>🔥 Key Cues</h5><ul><li>Pull rope up, lead with elbows high and out.</li><li>Separate the rope slightly at the top.</li></ul><h5>⚠️ Mistakes to Avoid</h5><ul><li>Letting elbows drop below wrists.</li><li>Shrugging too much.</li></ul><p>💡 <b>Quick Tip:</b> Think “elbows drive out and up” — the hands follow.</p><div class="img-placeholder-container two-col"><div class="img-placeholder"><img src="https://i.imgur.com/XnRYfNL.png" alt="Cable Upright Row Start"></div><div class="img-placeholder"><img src="https://i.imgur.com/SQXKozx.png" alt="Cable Upright Row End"></div></div></div></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-trigger"><h4>Rear Delts</h4><i class="icon">+</i></div>
+                <div class="accordion-content">
+                    <div class="accordion-content-inner">
+                        <div class="accordion-item"><div class="accordion-trigger"><h5>Cable Face Pull (Rope)</h5><i class="icon">+</i></div><div class="accordion-content"><div class="accordion-content-inner exercise-content-inner"><p>🎯 <b>Target:</b> Rear Delts (primary), Upper Traps</p><h5>⚙️ Setup</h5><ul><li>Attach rope to mid-level cable.</li></ul><h5>🔥 Key Cues</h5><ul><li>Pull rope towards your face, elbows high and wide.</li><li>Squeeze shoulder blades together.</li></ul><h5>⚠️ Mistakes to Avoid</h5><ul><li>Pulling low towards chest.</li></ul><p>💡 <b>Quick Tip:</b> Think “elbows back and wide, hands separate at top.”</p><div class="img-placeholder-container two-col"><div class="img-placeholder"><img src="https://i.imgur.com/PkNSbb2.png" alt="Face Pull Start"></div><div class="img-placeholder"><img src="https://i.imgur.com/x6v3aAs.png" alt="Face Pull End"></div></div></div></div></div>
+                        <div class="accordion-item"><div class="accordion-trigger"><h5>Rear Delt Pec Deck</h5><i class="icon">+</i></div><div class="accordion-content"><div class="accordion-content-inner exercise-content-inner"><p>🎯 <b>Target:</b> Rear Delts (primary), Upper Back (secondary)</p><h5>⚙️ Setup</h5><ul><li>Sit facing the pad (chest supported).</li></ul><h5>🔥 Key Cues</h5><ul><li>Pull arms straight back in wide arc.</li><li>Lead with elbows.</li></ul><h5>⚠️ Mistakes to Avoid</h5><ul><li>Letting elbows bend too much.</li></ul><p>💡 <b>Quick Tip:</b> Think “open arms wide like spreading wings.”</p><div class="img-placeholder-container two-col"><div class="img-placeholder"><img src="https://i.imgur.com/qDrcc2h.png" alt="Rear Delt Pec Deck Start"></div><div class="img-placeholder"><img src="https://i.imgur.com/fbGYcJ3.png" alt="Rear Delt Pec Deck End"></div></div></div></div></div>
+                        <div class="accordion-item"><div class="accordion-trigger"><h5>Bent Over Rear Delt Dumbbell Fly</h5><i class="icon">+</i></div><div class="accordion-content"><div class="accordion-content-inner exercise-content-inner"><p>🎯 <b>Target:</b> Rear Delts (primary), Upper Back (secondary)</p><h5>⚙️ Setup</h5><ul><li>Hinge at hips, chest over toes, back flat.</li></ul><h5>🔥 Key Cues</h5><ul><li>Pull dumbbells out wide like opening wings.</li><li>Lead with elbows.</li></ul><h5>⚠️ Mistakes to Avoid</h5><ul><li>Turning it into a row.</li></ul><p>💡 <b>Quick Tip:</b> Think “wide arc, elbows drive out — not back.”</p><div class="img-placeholder-container two-col"><div class="img-placeholder"><img src="https://i.imgur.com/UOFDZwU.png" alt="Bent Over Fly Start"></div><div class="img-placeholder"><img src="https://i.imgur.com/KOoJcak.png" alt="Bent Over Fly End"></div></div></div></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-button-container"><button class="back-to-dashboard">← Dashboard</button></div>
+        </div>
+        
+        <div class="footer-license">
+            <p>&copy; 2024 Oliver Burke / MilkNation. All Rights Reserved.</p>
+            <p>This program is for the personal use of the original purchaser only. Unauthorized distribution is prohibited.</p>
+        </div>
+
+        <!-- Video Modal -->
+        <div class="video-modal-overlay" id="video-modal">
+            <div class="video-modal-content">
+                <div class="video-modal-close" id="close-video-modal">×</div>
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/Buy2U-1CTnI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const pages = document.querySelectorAll('.page');
+            
+            // --- Helper function to create tracker HTML ---
+            function createTrackerHTML() {
+                let html = '';
+                for (let i = 1; i <= 6; i++) {
+                    html += `
+                    <div class="accordion-item">
+                        <div class="accordion-trigger"><h4>WEEK ${i}</h4><i class="icon">+</i></div>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <div class="table-wrapper">
+                                    <table class="workout-table">
+                                        <thead><tr><th>Workout A</th><th>Set 1</th><th>Set 2</th></tr></thead>
+                                        <tbody>
+                                            <tr class="exercise-row"><td><div class="exercise-reveal-trigger" data-img1="https://i.imgur.com/vZFMqwM.png" data-img2="https://i.imgur.com/ZqWeO0S.png" data-desc="Keep forearms vertical. Don't let elbows flare too wide.">Seated Dumbbell Shoulder Press <span class="reveal-text">(reveal)</span></div><span class="subtle">Alternate: <span class="exercise-reveal-trigger" data-img1="https://i.imgur.com/GpPWMZa.png" data-img2="https://i.imgur.com/uq8fAfc.png" data-desc="Keep core braced. Move your head around the bar, not the bar around your head.">Barbell Standing Military Press <span class="reveal-text">(reveal)</span></span></span></td><td><div class="tracker-input-group"><input type="number" class="tracker-input" placeholder="Reps"><span class="tracker-input-label">x</span><input type="number" class="tracker-input" placeholder="Kgs"></div></td><td><div class="tracker-input-group"><input type="number" class="tracker-input" placeholder="Reps"><span class="tracker-input-label">x</span><input type="number" class="tracker-input" placeholder="Kgs"></div></td></tr>
+                                            <tr class="exercise-reveal-row"><td colspan="3"><div class="exercise-reveal-content"><p class="reveal-description"></p><div class="img-placeholder-container two-col"><div class="img-placeholder img1"></div><div class="img-placeholder img2"></div></div></div></td></tr>
+                                            <tr class="exercise-row"><td><div class="exercise-reveal-trigger" data-img1="https://i.imgur.com/AzrVb3B.png" data-img2="https://i.imgur.com/PWnEguw.png" data-desc="Lead with the elbow, not the hand. Control the negative to keep tension on the side delt.">Cable Lateral Raise (Single Arm) <span class="reveal-text">(reveal)</span></div><span class="subtle">Alternate: <span class="exercise-reveal-trigger" data-img1="https://i.imgur.com/Bmgrfdt.png" data-img2="https://i.imgur.com/ShF8gM0.png" data-desc="Use your body as an anchor. Isolate the side delt by preventing all torso movement.">Lean-In Dumbbell Lateral Raise <span class="reveal-text">(reveal)</span></span></span></td><td><div class="tracker-input-group"><input type="number" class="tracker-input" placeholder="Reps"><span class="tracker-input-label">x</span><input type="number" class="tracker-input" placeholder="Kgs"></div></td><td><div class="tracker-input-group"><input type="number" class="tracker-input" placeholder="Reps"><span class="tracker-input-label">x</span><input type="number" class="tracker-input" placeholder="Kgs"></div></td></tr>
+                                            <tr class="exercise-reveal-row"><td colspan="3"><div class="exercise-reveal-content"><p class="reveal-description"></p><div class="img-placeholder-container two-col"><div class="img-placeholder img1"></div><div class="img-placeholder img2"></div></div></div></td></tr>
+                                            <tr class="exercise-row"><td><div class="exercise-reveal-trigger" data-img1="https://i.imgur.com/iXR26KG.png" data-img2="https://i.imgur.com/Cb0SYDW.png" data-desc="Controlled power in the bottom half of the rep. This is for overload, not full range.">Dumbbell Lateral Raise Partials <span class="reveal-text">(reveal)</span></div><span class="subtle">Alternate: None</span></td><td><div class="tracker-input-group"><input type="number" class="tracker-input" placeholder="Reps"><span class="tracker-input-label">x</span><input type="number" class="tracker-input" placeholder="Kgs"></div></td><td><div class="tracker-input-group"><input type="number" class="tracker-input" placeholder="Reps"><span class="tracker-input-label">x</span><input type="number" class="tracker-input" placeholder="Kgs"></div></td></tr>
+                                            <tr class="exercise-reveal-row"><td colspan="3"><div class="exercise-reveal-content"><p class="reveal-description"></p><div class="img-placeholder-container two-col"><div class="img-placeholder img1"></div><div class="img-placeholder img2"></div></div></div></td></tr>
+                                            <tr class="exercise-row"><td><div class="exercise-reveal-trigger" data-img1="https://i.imgur.com/qDrcc2h.png" data-img2="https://i.imgur.com/fbGYcJ3.png" data-desc="Think 'open your wings'. Squeeze at the peak of the contraction, keeping your chest on the pad.">Rear Delt Pec Deck <span class="reveal-text">(reveal)</span></div><span class="subtle">Alternate: <span class="exercise-reveal-trigger" data-img1="https://i.imgur.com/UOFDZwU.png" data-img2="https://i.imgur.com/KOoJcak.png" data-desc="Maintain a flat back. Drive elbows out wide, not back, to isolate the rear delts.">Bent Over Rear Delt Dumbbell Fly <span class="reveal-text">(reveal)</span></span></span></td><td><div class="tracker-input-group"><input type="number" class="tracker-input" placeholder="Reps"><span class="tracker-input-label">x</span><input type="number" class="tracker-input" placeholder="Kgs"></div></td><td>-</td></tr>
+                                            <tr class="exercise-reveal-row"><td colspan="3"><div class="exercise-reveal-content"><p class="reveal-description"></p><div class="img-placeholder-container two-col"><div class="img-placeholder img1"></div><div class="img-placeholder img2"></div></div></div></td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="table-wrapper">
+                                    <table class="workout-table">
+                                        <thead><tr><th>Workout B</th><th>Set 1</th><th>Set 2</th><th>Set 3</th></tr></thead>
+                                        <tbody>
+                                            <tr class="exercise-row"><td><div class="exercise-reveal-trigger" data-img1="https://i.imgur.com/XnRYfNL.png" data-img2="https://i.imgur.com/SQXKozx.png" data-desc="Pull with your elbows high and out. Separate the rope at the top to fully engage the delts.">Cable Rope Upright Row <span class="reveal-text">(reveal)</span></div><span class="subtle">Alternate: <span class="exercise-reveal-trigger" data-img1="https://i.imgur.com/VLdZQzA.png" data-img2="https://i.imgur.com/4sOOhoW.png" data-desc="Let the bar come as close to your face as possible. Controlled press up and deep stretch down.">Smith Machine Seated Shoulder Press <span class="reveal-text">(reveal)</span></span></span></td><td><div class="tracker-input-group"><input type="number" class="tracker-input" placeholder="Reps"><span class="tracker-input-label">x</span><input type="number" class="tracker-input" placeholder="Kgs"></div></td><td><div class="tracker-input-group"><input type="number" class="tracker-input" placeholder="Reps"><span class="tracker-input-label">x</span><input type="number" class="tracker-input" placeholder="Kgs"></div></td><td><div class="tracker-input-group"><input type="number" class="tracker-input" placeholder="Reps"><span class="tracker-input-label">x</span><input type="number" class="tracker-input" placeholder="Kgs"></div></td></tr>
+                                            <tr class="exercise-reveal-row"><td colspan="4"><div class="exercise-reveal-content"><p class="reveal-description"></p><div class="img-placeholder-container two-col"><div class="img-placeholder img1"></div><div class="img-placeholder img2"></div></div></div></td></tr>
+                                            <tr class="exercise-row"><td><div class="exercise-reveal-trigger" data-img1="https://i.imgur.com/djP7RC8.png" data-img2="https://i.imgur.com/EXZJW3p.png" data-desc="Think 'out,' not 'up.' Keep your shoulders down and away from your ears to isolate the side delts.">Seated Dumbbell Lateral Raise <span class="reveal-text">(reveal)</span></div><span class="subtle">Alternate: <span class="exercise-reveal-trigger" data-img1="https://i.imgur.com/Bmgrfdt.png" data-img2="https://i.imgur.com/ShF8gM0.png" data-desc="Use your body as an anchor. Isolate the side delt by preventing all torso movement.">Lean-In Dumbbell Lateral Raise <span class="reveal-text">(reveal)</span></span></span></td><td><div class="tracker-input-group"><input type="number" class="tracker-input" placeholder="Reps"><span class="tracker-input-label">x</span><input type="number" class="tracker-input" placeholder="Kgs"></div></td><td><div class="tracker-input-group"><input type="number" class="tracker-input" placeholder="Reps"><span class="tracker-input-label">x</span><input type="number" class="tracker-input" placeholder="Kgs"></div></td><td>-</td></tr>
+                                            <tr class="exercise-reveal-row"><td colspan="4"><div class="exercise-reveal-content"><p class="reveal-description"></p><div class="img-placeholder-container two-col"><div class="img-placeholder img1"></div><div class="img-placeholder img2"></div></div></div></td></tr>
+                                            <tr class="exercise-row"><td><div class="exercise-reveal-trigger" data-img1="https://i.imgur.com/PkNSbb2.png" data-img2="https://i.imgur.com/x6v3aAs.png" data-desc="Pull the rope towards your face, not your chest. Keep elbows high to target the rear delts and upper back.">Cable Face Pull <span class="reveal-text">(reveal)</span></div><span class="subtle">Alternate: <span class="exercise-reveal-trigger" data-img1="https://i.imgur.com/UOFDZwU.png" data-img2="https://i.imgur.com/KOoJcak.png" data-desc="Maintain a flat back. Drive elbows out wide, not back, to isolate the rear delts.">Bent Over Rear Delt Dumbbell Fly <span class="reveal-text">(reveal)</span></span></span></td><td><div class="tracker-input-group"><input type="number" class="tracker-input" placeholder="Reps"><span class="tracker-input-label">x</span><input type="number" class="tracker-input" placeholder="Kgs"></div></td><td><div class="tracker-input-group"><input type="number" class="tracker-input" placeholder="Reps"><span class="tracker-input-label">x</span><input type="number" class="tracker-input" placeholder="Kgs"></div></td><td>-</td></tr>
+                                            <tr class="exercise-reveal-row"><td colspan="4"><div class="exercise-reveal-content"><p class="reveal-description"></p><div class="img-placeholder-container two-col"><div class="img-placeholder img1"></div><div class="img-placeholder img2"></div></div></div></td></tr>
+                                            <tr class="exercise-row"><td><div class="exercise-reveal-trigger" data-img1="https://i.imgur.com/qDrcc2h.png" data-img2="https://i.imgur.com/fbGYcJ3.png" data-desc="Think 'open your wings'. Squeeze at the peak of the contraction, keeping your chest on the pad.">Rear Delt Pec Deck <span class="reveal-text">(reveal)</span></div><span class="subtle">Alternate: <span class="exercise-reveal-trigger" data-img1="https://i.imgur.com/UOFDZwU.png" data-img2="https://i.imgur.com/KOoJcak.png" data-desc="Maintain a flat back. Drive elbows out wide, not back, to isolate the rear delts.">Bent Over Rear Delt Dumbbell Fly <span class="reveal-text">(reveal)</span></span></span></td><td><div class="tracker-input-group"><input type="number" class="tracker-input" placeholder="Reps"><span class="tracker-input-label">x</span><input type="number" class="tracker-input" placeholder="Kgs"></div></td><td>-</td><td>-</td></tr>
+                                            <tr class="exercise-reveal-row"><td colspan="4"><div class="exercise-reveal-content"><p class="reveal-description"></p><div class="img-placeholder-container two-col"><div class="img-placeholder img1"></div><div class="img-placeholder img2"></div></div></div></td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                }
+                return html;
+            }
+
+            // --- Populate all trackers ---
+            const trackerIds = ['ppl-tracker', 'bro-tracker', 'full-body-tracker', 'upper-lower-tracker'];
+            trackerIds.forEach(id => {
+                const container = document.getElementById(id);
+                if (container) {
+                    container.innerHTML = createTrackerHTML();
+                }
+            });
+
+            // --- Page Navigation Logic ---
+            function showPage(pageId) {
+                pages.forEach(page => page.classList.remove('active'));
+                const targetPage = document.getElementById(pageId);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                    window.scrollTo(0, 0);
+                }
+            }
+
+            // --- Unified Event Listener for all clicks ---
+            document.addEventListener('click', function(e) {
+                const target = e.target;
+                
+                // Dashboard Navigation & Back Buttons
+                const dashboardCard = target.closest('.dashboard-card');
+                if (dashboardCard && dashboardCard.dataset.target) {
+                    showPage(dashboardCard.dataset.target);
+                    return;
+                }
+                
+                const backButton = target.closest('.back-to-dashboard');
+                 if (backButton) {
+                    showPage('page-dashboard');
+                    return;
+                }
+
+                const stickyLogo = target.closest('.sticky-logo-container');
+                if (stickyLogo) {
+                    showPage('page-dashboard');
+                    return;
+                }
+
+                // Video Modal
+                const openVideoTrigger = target.closest('#open-video-modal');
+                if (openVideoTrigger) {
+                    const videoModal = document.getElementById('video-modal');
+                    if (videoModal) videoModal.classList.add('active');
+                    return;
+                }
+                
+                const closeVideoTrigger = target.closest('.video-modal-close');
+                const videoOverlay = target.closest('.video-modal-overlay');
+                if (closeVideoTrigger || (videoOverlay && e.target === videoOverlay)) {
+                    const videoModal = document.getElementById('video-modal');
+                    if (videoModal) {
+                        const videoIframe = videoModal.querySelector('iframe');
+                        videoModal.classList.remove('active');
+                        if (videoIframe) {
+                            videoIframe.src = videoIframe.src; // Stop video by reloading
+                        }
+                    }
+                    return;
+                }
+
+                // Accordion
+                const accordionTrigger = target.closest('.accordion-trigger');
+                if (accordionTrigger) {
+                    const parentItem = accordionTrigger.parentElement;
+                    const content = accordionTrigger.nextElementSibling;
+                    if (parentItem.classList.contains('accordion-item') && content && content.classList.contains('accordion-content')) {
+                        const isOpening = !parentItem.classList.contains('active');
+                        if (isOpening) {
+                            const parentGroup = parentItem.parentElement;
+                            if (parentGroup && !parentGroup.classList.contains('accordion-content-inner')) {
+                                const openItems = parentGroup.querySelectorAll(':scope > .accordion-item.active');
+                                openItems.forEach(openItem => {
+                                    if (openItem !== parentItem) {
+                                        openItem.classList.remove('active');
+                                        openItem.querySelector('.accordion-content').style.maxHeight = null;
+                                    }
+                                });
+                            }
+                        }
+                        parentItem.classList.toggle('active');
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                            let parentAccordion = parentItem.closest('.accordion-content');
+                            while(parentAccordion) {
+                                parentAccordion.style.maxHeight = parentAccordion.scrollHeight + content.scrollHeight + "px";
+                                parentAccordion = parentAccordion.parentElement.closest('.accordion-content');
+                            }
+                        }
+                    }
+                    return; 
+                }
+
+                // Inline Exercise Reveal
+                const exerciseTrigger = target.closest('.exercise-reveal-trigger');
+                if(exerciseTrigger){
+                    const parentRow = exerciseTrigger.closest('tr');
+                    const revealRow = parentRow.nextElementSibling;
+                    
+                    if(revealRow && revealRow.classList.contains('exercise-reveal-row')){
+                        const wasActive = revealRow.style.display === 'table-row' && revealRow.dataset.activeTrigger === exerciseTrigger.outerHTML;
+                        const img1 = exerciseTrigger.dataset.img1;
+                        const img2 = exerciseTrigger.dataset.img2;
+                        const desc = exerciseTrigger.dataset.desc;
+
+                        // Close all other reveal rows in the same table body
+                        const tableBody = parentRow.parentElement;
+                        tableBody.querySelectorAll('.exercise-reveal-row').forEach(row => {
+                            row.style.display = 'none';
+                        });
+
+                        // Toggle the clicked one
+                        if(!wasActive) {
+                           revealRow.style.display = 'table-row';
+                           revealRow.dataset.activeTrigger = exerciseTrigger.outerHTML;
+                           const descContainer = revealRow.querySelector('.reveal-description');
+                           const img1Container = revealRow.querySelector('.img1');
+                           const img2Container = revealRow.querySelector('.img2');
+                           
+                           descContainer.textContent = desc || '';
+                           img1Container.innerHTML = img1 ? `<img src="${img1}" alt="Exercise Image 1">` : '';
+                           img2Container.innerHTML = img2 ? `<img src="${img2}" alt="Exercise Image 2">` : '';
+                        } 
+                        
+                        // Recalculate parent accordion height after any change
+                        let parentAccordionContent = parentRow.closest('.accordion-content');
+                        if(parentAccordionContent){
+                           parentAccordionContent.style.maxHeight = parentAccordionContent.scrollHeight + "px";
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
