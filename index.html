@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>The Shoulder Protocol - Build Capped Delts in 6 Weeks</title>
+    <style>
+        /* --- Font Import --- */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Roboto:wght@400;500&display=swap');
+
+        /* --- Color Palette & Design Tokens --- */
+        :root {
+            --bg-canvas: #FFFFFF;
+            --bg-offset: #F9FAFB;
+            --text-obsidian: #111827;
+            --text-muted: #4B5563;
+            --accent-gold: #FBBF24;
+            --accent-blue: #3B82F6;
+            --border-color: #E5E7EB;
+            --card-bg: #FFFFFF;
+            --shadow-light: rgba(0, 0, 0, 0.04);
+            --shadow-medium: rgba(0, 0, 0, 0.08);
+            --heading-font: 'Inter', sans-serif;
+            --body-font: 'Roboto', sans-serif;
+        }
+
+        /* --- Global Resets & Base Styles --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--body-font);
+            background-color: var(--bg-canvas);
+            color: var(--text-obsidian);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* --- Layout & Section Styling --- */
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+        .section { padding: 6rem 0; text-align: center; }
+        .section-offset { background-color: var(--bg-offset); }
+        .section-header { max-width: 750px; margin: 0 auto 4rem; }
+
+        /* --- Typography --- */
+        h1, h2, h3, h4 { font-family: var(--heading-font); line-height: 1.2; font-weight: 800; }
+        h1 { font-size: 4rem; letter-spacing: -0.05em; }
+        h2 { font-size: 3rem; letter-spacing: -0.025em; }
+        h3 { font-size: 1.75rem; }
+        p { color: var(--text-muted); font-size: 1.1rem; max-width: 65ch; margin: 0 auto; }
+        .section-header h2 { margin-bottom: 1rem; }
+        .eyebrow-text {
+            font-family: var(--heading-font);
+            font-weight: 600;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        /* --- Hero Section --- */
+        .hero { padding: 6rem 0; }
+        .hero-content { text-align: center; }
+        .hero h1 { margin-bottom: 1.5rem; }
+        .hero .subheading { font-size: 1.25rem; margin-bottom: 2.5rem; color: var(--text-muted); max-width: 600px; margin-left: auto; margin-right: auto; }
+        .hero-cta-button {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: var(--accent-gold);
+            color: var(--text-obsidian);
+            font-family: var(--heading-font);
+            font-weight: 800;
+            font-size: 1.2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            box-shadow: 0 5px 20px rgba(251, 191, 36, 0.3);
+            min-height: 48px;
+        }
+        .hero-cta-button:active { transform: scale(0.95); }
+        @media (hover: hover) {
+            .hero-cta-button:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(251, 191, 36, 0.4); }
+        }
+        
+        /* --- Before & After Slider --- */
+        .slider-container {
+            max-width: 900px;
+            margin: 4rem auto 0;
+            position: relative;
+            padding: 0 60px; /* Space for arrows */
+        }
+        .slider-overflow-wrapper { overflow: hidden; }
+        .slides-wrapper {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .slide {
+            flex: 0 0 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        .ba-card { text-align: center; }
+        .ba-card h3 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--text-muted); font-weight: 600; }
+        .ba-image-placeholder {
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            background-color: #111827;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #D1D5DB;
+            overflow: hidden;
+            padding: 0.5rem;
+        }
+        .ba-image-placeholder img { width: 100%; height: 100%; object-fit: contain; }
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            left: 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 0;
+        }
+        .slider-btn {
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        .slider-btn:active { transform: scale(0.95); }
+        @media (hover: hover) {
+            .slider-btn:hover { background-color: #fff; transform: scale(1.1); }
+        }
+
+
+        /* --- Social Proof Section --- */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .testimonial-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1rem;
+            box-shadow: 0 4px 15px var(--shadow-light);
+        }
+        .testimonial-image-placeholder {
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .testimonial-image-placeholder img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* --- Free Value Module Section --- */
+        .canva-placeholder {
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+            border-radius: 16px;
+            display: flex;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+        .canva-placeholder img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .download-button {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 0.8rem 1.5rem;
+            background: var(--accent-blue);
+            color: #fff;
+            font-family: var(--heading-font);
+            font-weight: 600;
+            font-size: 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+            min-height: 48px;
+        }
+        .download-button:active { transform: scale(0.95); }
+        @media (hover: hover) {
+            .download-button:hover { opacity: 0.8; }
+        }
+
+
+        /* --- Final CTA Section --- */
+        .final-cta { background: var(--text-obsidian); color: #fff; padding: 6rem 0; border-radius: 24px; }
+        .final-cta h2 { color: #fff; }
+        .final-cta p { color: #9CA3AF; margin-bottom: 1.5rem; }
+        .price-wrapper { display: flex; justify-content: center; align-items: center; gap: 1.5rem; margin: 2rem 0; }
+        .price-old { font-size: 2.5rem; font-weight: 600; color: #6B7280; text-decoration: line-through; }
+        .price-new { font-size: 4.5rem; font-weight: 800; color: var(--accent-gold); }
+        .discount-badge { background: var(--accent-gold); color: #000; padding: 0.5rem 1rem; border-radius: 8px; font-family: var(--heading-font); font-weight: 800; margin-top: -1rem; }
+        
+        /* --- Guarantee Section --- */
+        .guarantee-box {
+            max-width: 600px;
+            margin: 3rem auto 0;
+            padding: 2rem;
+            border: 2px dashed var(--accent-gold);
+            border-radius: 16px;
+        }
+        .guarantee-box h4 { font-size: 1.25rem; color: #fff; margin-bottom: 0.5rem;}
+        .guarantee-box p { font-size: 1rem; color: #9CA3AF; }
+
+
+        /* --- FAQ Section & Accordions --- */
+        .faq-item, .free-value-accordion { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 1rem; overflow: hidden; text-align: left; }
+        .faq-trigger, .free-value-trigger { background: none; border: none; font-family: var(--heading-font); font-weight: 600; font-size: 1.1rem; text-align: left; cursor: pointer; width: 100%; padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+        .free-value-trigger h3 { font-size: 1.5rem; margin: 0; }
+        .faq-trigger .icon, .free-value-trigger .icon { font-style: normal; transition: transform 0.3s; }
+        .faq-item.active .faq-trigger .icon, .free-value-accordion.active .free-value-trigger .icon { transform: rotate(45deg); }
+        .faq-content, .free-value-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out; }
+        .faq-content-inner, .free-value-content-inner { padding: 0 1.5rem 1.5rem; border-top: 1px solid var(--border-color); }
+        .faq-content-inner p { margin-left: 0; }
+        .free-value-content-inner { padding-top: 1.5rem; }
+
+
+        /* --- Footer --- */
+        .footer { padding: 4rem 0 2rem; font-size: 0.9rem; color: #9CA3AF; }
+        
+        /* --- Responsive Styles --- */
+        @media (max-width: 900px) {
+            h1 { font-size: 3rem; }
+            h2 { font-size: 2.5rem; }
+            .slider-container { padding: 0; }
+            .slider-btn.prev { margin-left: 10px; }
+            .slider-btn.next { margin-right: 10px; }
+        }
+        @media (max-width: 600px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            .section { padding: 4rem 0; }
+            .hero { padding: 4rem 0; }
+            p { font-size: 1rem; }
+            .slide { grid-template-columns: 1fr; }
+            .ba-card:first-child { margin-bottom: 1.5rem; }
+            .slider-btn { width: 40px; height: 40px; font-size: 1.2rem; }
+            .testimonials-grid { grid-template-columns: 1fr; }
+            .price-wrapper { flex-direction: column; gap: 0.5rem; }
+            .price-new { font-size: 3.5rem; }
+            .price-old { font-size: 2rem; }
+            .hero-cta-button { width: 100%; max-width: 350px; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- 1. Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <span class="eyebrow-text">Stop Guessing. Start Building.</span>
+                <h1>You Can't Fake a Strong Frame.</h1>
+                <p class="subheading">A strong frame is earned, not bought. This is the 6-week protocol to build yours.</p>
+                <a href="https://4048922709943.gumroad.com/l/TheShoulderProtocol" class="hero-cta-button">Get The Protocol</a>
+            </div>
+            
+            <!-- Dynamic Before & After Slider -->
+            <div class="slider-container" id="ba-slider">
+                <div class="slider-overflow-wrapper">
+                    <div class="slides-wrapper">
+                        <!-- Slide 1 -->
+                        <div class="slide">
+                            <div class="ba-card">
+                                <h3>Before</h3>
+                                <div class="ba-image-placeholder"><img src="https://i.imgur.com/RtLM3Jq.png" alt="A man's shoulders before starting the protocol, showing less definition." ></div>
+                            </div>
+                            <div class="ba-card">
+                                <h3>After 6 Weeks</h3>
+                                <div class="ba-image-placeholder"><img src="https://i.imgur.com/rA5kweO.png" alt="The same man's shoulders after 6 weeks, showing significant growth and capping." ></div>
+                            </div>
+                        </div>
+                        <!-- Slide 2 -->
+                        <div class="slide">
+                            <div class="ba-card">
+                                <h3>Before</h3>
+                                <div class="ba-image-placeholder"><img src="https://i.imgur.com/GCz7agM.png" alt="A second man's shoulders before the protocol."></div>
+                            </div>
+                            <div class="ba-card">
+                                <h3>After 6 Weeks</h3>
+                                <div class="ba-image-placeholder"><img src="https://i.imgur.com/2Pg9kTf.png" alt="The second man's shoulders after 6 weeks on the protocol, looking wider and more developed."></div>
+                            </div>
+                        </div>
+                        <!-- Slide 3 -->
+                        <div class="slide">
+                            <div class="ba-card">
+                                <h3>Before</h3>
+                                <div class="ba-image-placeholder"><img src="https://i.imgur.com/U8mNysE.jpeg" alt="A third man's physique before the protocol."></div>
+                            </div>
+                            <div class="ba-card">
+                                <h3>After 6 Weeks</h3>
+                                <div class="ba-image-placeholder"><img src="https://i.imgur.com/dUT0yDZ.jpeg" alt="The third man's physique after 6 weeks, showing a leaner and more muscular build."></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slider-nav">
+                    <button class="slider-btn prev" aria-label="Previous Slide">&lt;</button>
+                    <button class="slider-btn next" aria-label="Next Slide">&gt;</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Social Proof Section -->
+    <section class="section section-offset">
+        <div class="container">
+            <div class="section-header">
+                <h2>Real Guys, Real Results.</h2>
+                <p>This isn't theory. This is what happens when you follow a system that actually works. No fluff, just proof.</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card"><div class="testimonial-image-placeholder"><img src="https://i.imgur.com/Uoll9W4.png" alt="Testimonial screenshot."></div></div>
+                <div class="testimonial-card"><div class="testimonial-image-placeholder"><img src="https://i.imgur.com/rKyXwnI.png" alt="Testimonial screenshot."></div></div>
+                <div class="testimonial-card"><div class="testimonial-image-placeholder"><img src="https://i.imgur.com/UinSRfH.png" alt="Testimonial screenshot."></div></div>
+                <div class="testimonial-card"><div class="testimonial-image-placeholder"><img src="https://i.imgur.com/AIjA2tV.png" alt="Testimonial screenshot."></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Free Value Module Section -->
+    <section class="section">
+        <div class="container" style="max-width: 800px;">
+            <div class="section-header">
+                <span class="eyebrow-text">A Taste of the Protocol</span>
+                <h2>Get a Crazy Pump in 30 Minutes (Free)</h2>
+                <p>Don't have time? No problem. Here's a high-intensity workout straight from the protocol. Click below to reveal the template. This is the kind of actionable value you get inside.</p>
+            </div>
+            <div class="free-value-accordion">
+                 <button type="button" class="free-value-trigger" aria-expanded="false">
+                    <h3>Click to Reveal the 30-Minute Workout</h3>
+                    <span class="icon">+</span>
+                </button>
+                <div class="free-value-content">
+                    <div class="free-value-content-inner">
+                        <div class="canva-placeholder">
+                            <img src="https://i.imgur.com/fHwJNNh.png" alt="A template showing a 30 minute shoulder workout.">
+                        </div>
+                        <a href="https://i.imgur.com/fHwJNNh.png" class="download-button" download="30-minute-shoulder-workout.png" target="_blank">Download The Template</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Final Call-to-Action Section -->
+    <section class="section" id="cta">
+        <div class="container">
+            <div class="final-cta">
+                <div class="section-header">
+                    <h2>Your Frame is Waiting.</h2>
+                    <p>This is your one-time opportunity to get the complete beta version of The Shoulder Protocol, including all future updates and the bonus Fueling Guide, at a massive discount.</p>
+                </div>
+                <div class="price-wrapper">
+                    <span class="price-old">$249</span>
+                    <span class="price-new">$49</span>
+                </div>
+                <div class="discount-badge">80% OFF BETA ACCESS</div>
+                <a href="https://4048922709943.gumroad.com/l/TheShoulderProtocol" class="hero-cta-button" style="margin-top: 3rem;">Get Instant Access Now</a>
+
+                <div class="guarantee-box">
+                    <h4>The "Do The Work & See Results" Guarantee</h4>
+                    <p>My promise is simple: Put this protocol to the test. If you honestly complete the 6-week program and don't see or feel a noticeable difference, I insist you get 100% of your money back. Just email me your completed tracker and a short note on what didn't work for you, and I'll refund you in full.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. FAQ Section -->
+    <section class="section">
+        <div class="container" style="max-width: 800px;">
+            <div class="section-header">
+                <h2>Your Questions, Answered.</h2>
+            </div>
+            <div class="faq-item">
+                <button type="button" class="faq-trigger" aria-expanded="false">What equipment do I need?<span class="icon">+</span></button>
+                <div class="faq-content"><div class="faq-content-inner"><p>The protocol is designed to work with standard gym equipment. You'll need access to dumbbells, an adjustable bench, and a cable machine for the best results. All exercises have alternatives you can use.</p></div></div>
+            </div>
+            <div class="faq-item">
+                <button type="button" class="faq-trigger" aria-expanded="false">Is this beginner-friendly?<span class="icon">+</span></button>
+                <div class="faq-content"><div class="faq-content-inner"><p>Yes. It's for any man, from 14 to 40, who is tired of garbage programs. It's built for clarity. The tracker tells you what to do, and the vault shows you how to do it.</p></div></div>
+            </div>
+            <div class="faq-item">
+                <button type="button" class="faq-trigger" aria-expanded="false">What happens after I pay?<span class="icon">+</span></button>
+                <div class="faq-content"><div class="faq-content-inner"><p>You will receive an email with a link to instantly download The Shoulder Protocol and the bonus Fueling Guide. It is a single HTML file that you can save to your phone, computer, or cloud drive and use immediately.</p></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Oliver Burke / MilkNation. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Accordion Logic (for FAQ and Free Module)
+            document.querySelectorAll('.faq-trigger, .free-value-trigger').forEach(button => {
+                button.addEventListener('click', () => {
+                    const parentItem = button.parentElement;
+                    const content = button.nextElementSibling;
+                    const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+                    parentItem.classList.toggle('active');
+                    button.setAttribute('aria-expanded', !isExpanded);
+
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    }
+                });
+            });
+
+            // Generic Slider Logic
+            function setupSlider(sliderId) {
+                const slider = document.getElementById(sliderId);
+                if (!slider) return;
+
+                const slidesWrapper = slider.querySelector('.slides-wrapper, .testimonial-slides-wrapper');
+                const slides = slider.querySelectorAll('.slide, .testimonial-slide');
+                const prevBtn = slider.querySelector('.slider-btn.prev');
+                const nextBtn = slider.querySelector('.slider-btn.next');
+                let currentIndex = 0;
+
+                function showSlide(index) {
+                    if (slides.length === 0) return;
+                    if (index >= slides.length) {
+                        currentIndex = 0;
+                    } else if (index < 0) {
+                        currentIndex = slides.length - 1;
+                    } else {
+                        currentIndex = index;
+                    }
+                    const offset = -currentIndex * 100;
+                    slidesWrapper.style.transform = `translateX(${offset}%)`;
+                }
+
+                nextBtn.addEventListener('click', () => {
+                    showSlide(currentIndex + 1);
+                });
+
+                prevBtn.addEventListener('click', () => {
+                    showSlide(currentIndex - 1);
+                });
+            }
+
+            setupSlider('ba-slider');
+            setupSlider('testimonial-slider');
+        });
+    </script>
+
+</body>
+</html>
